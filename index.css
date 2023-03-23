@@ -75,7 +75,7 @@ ul {
   transition: 2s;
 }
 
-.btn {
+.add {
   background-color: #b8d6ff;
   border: 1px solid var(--text-color);
   border-radius: 15px;
@@ -89,7 +89,7 @@ ul {
   top: 0;
   left: 0;
 }
-.btn:hover {
+.add:hover {
   background-color: var(--primary-color);
   color: #b8d6ff;
   transition: all 0.4s cubic-bezier(0.3, 0.7, 0.1, 1.9);
@@ -115,4 +115,11 @@ ul {
   color: #b8d6ff;
   transition: all 0.4s cubic-bezier(0.3, 0.7, 0.1, 1.9);
   top: -5px;
+}
+.task-content {
+  width: 12em;
+  padding: 5px;
+  border: none;
+  background-color: rgb(156, 200, 214);
+  font-size: 0.85rem;
 }

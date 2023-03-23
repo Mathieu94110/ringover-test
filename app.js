@@ -1,78 +1,80 @@
-const inp = document.querySelector(".inp");
-const btn = document.querySelector(".btn");
-const ul = document.querySelector(".ul");
 const inpSearch = document.querySelector(".inpSearch");
+const addButton = document.querySelector(".add");
+const textArea = document.querySelector(".inp");
+const tasksList = document.querySelector(".ul");
+
+// Variables //
+const allTasks = [];
 
 // Functions //
-const allTasks = [];
-const createTask = (task) => {
-  allTasks.push(task);
-};
+function renderTaskList() {
+  const li = document.createElement("li");
+  const taskContent = document.createElement("input");
+  const deleteBtn = document.createElement("button");
+  const editBtn = document.createElement("button");
 
-inpSearch.addEventListener("keyup", () => {
-  renderTaskList();
-});
+  taskContent.setAttribute("readonly", "readonly");
+  taskContent.className = "task-content";
+  deleteBtn.classList.add("deleteBtn");
+  editBtn.classList.add("editBtn");
+  deleteBtn.innerHTML = "<i class='fa-solid fa-trash'></i>";
+  editBtn.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";
 
-const renderTaskList = () => {
-  ul.innerHTML = "";
-  const query = inpSearch.value || "";
-  const filterTasks = allTasks.filter((task) => {
-    if (query == "") {
-      return true;
+  if (!(textArea.value === "")) {
+    allTasks.push(li);
+    tasksList.appendChild(li);
+    li.appendChild(taskContent);
+    li.appendChild(editBtn);
+    li.appendChild(deleteBtn);
+    taskContent.value = textArea.value;
+
+    allTasks.forEach(function (element, key) {
+      element.id = key;
+      tasksList.appendChild(element);
+    });
+  } else {
+    return;
+  }
+
+  textArea.value = "";
+  taskContent.disabled = true;
+
+  editBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    if (editBtn.firstChild.classList.contains("fa-pen-to-square")) {
+      taskContent.disabled = false;
+      taskContent.removeAttribute("readonly");
+      taskContent.focus();
+      editBtn.innerHTML = "<i class='fa-solid fa-check'></i>";
     } else {
-      return task.text.toLowerCase().includes(query.toLowerCase());
+      taskContent.setAttribute("readonly", "readonly");
+      taskContent.disabled = true;
+      editBtn.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";
     }
   });
 
-  filterTasks.forEach((task) => {
-    const li = document.createElement("li");
-    const div = document.createElement("div");
-    const editBtn = document.createElement("button");
-    editBtn.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";
-    editBtn.classList.add("editBtn");
-    const deleteBtn = document.createElement("button");
-    deleteBtn.innerHTML = "X";
-    deleteBtn.classList.add("deleteBtn");
-
-    div.innerHTML = task.text;
-    div.classList.add("taskName");
-
-    li.append(div, editBtn, deleteBtn);
-    ul.append(li);
-
-    editBtn.addEventListener("click", () => {
-      editTask(task);
-      renderTaskList();
-    });
-
-    deleteBtn.addEventListener("click", () => {
-      removeTask(task);
-      renderTaskList();
-    });
-  });
-  const removeTask = (task) => {
-    const index = allTasks.findIndex((t) => {
-      return t.id === task.id;
-    });
+  deleteBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    const index = event.target.parentNode.id;
     allTasks.splice(index, 1);
-  };
-  const editTask = (task) => {
-    console.log(task);
-    const index = filterTasks.findIndex((t) => {
-      return t.id === task.id;
-    });
-    filterTasks[index].edit = !task.edit;
-  };
-};
+    this.parentElement.remove();
+  });
+}
 
 // Events //
-btn.addEventListener("click", () => {
-  const task = {};
-  task.text = inp.value;
-  task.id = new Date().getTime();
-  task.edit = false;
-  createTask(task);
-  inp.value = "";
-  inpSearch.value = "";
+
+textArea.addEventListener("keydown", function (event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    renderTaskList();
+  }
+});
+
+addButton.addEventListener("click", function () {
+  event.preventDefault();
+  renderTaskList();
+});
+
+inpSearch.addEventListener("keyup", () => {
   renderTaskList();
 });
