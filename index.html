@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="To do list" />
+    <link rel="stylesheet" href="index.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <title>To do list</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="to-do-list-container">
+        <h1>TO DO LIST</h1>
+        <div>
+          <input
+            type="text"
+            class="inpSearch"
+            placeholder="Rechercher par texte ou par date"
+          />
+        </div>
+        <br />
+        <div>
+          <input type="text" class="inp" placeholder="Ajouter une tâche" />
+          <button class="btn">+</button>
+        </div>
+        <div>
+          <h2>Tâches existantes :</h2>
+          <ul class="ul"></ul>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
