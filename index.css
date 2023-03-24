@@ -11,32 +11,48 @@ body {
 }
 
 .container {
-  height: 100vh;
+  height: calc(100vh - 16px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 50px 0;
+  width: 100%;
 }
 
 #to-do-list-container {
   display: flex;
   flex-direction: column;
   align-items: space-between;
+  width: 100%;
   text-align: center;
   background-color: var(--secondary-color);
-  width: 280px;
   font-family: "Unbounded-Regular";
   border-radius: 50px;
   border: inset 5px solid #ffe1b8;
   position: relative;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 
 h1,
 h2,
 h3 {
   color: var(--text-color);
+}
+
+h1 {
+  font-size: 22px;
+}
+h2 {
+  font-size: 18px;
+}
+h3 {
+  font-size: 14px;
+}
+
+input,
+span,
+button {
+  font-size: 10px;
 }
 
 input {
@@ -81,13 +97,15 @@ input {
   background-color: #ffe1b8;
   border-radius: 15px;
   align-items: center;
-  width: 90%;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 ul {
   padding: 0;
   max-height: 260px;
-  overflow: auto;
+  overflow-y: auto;
+  margin: 0 10px;
 }
 
 .ul li {
@@ -98,45 +116,25 @@ ul {
   transition: 2s;
 }
 
-.add {
-  background-color: #b8d6ff;
-  border: 1px solid var(--text-color);
-  border-radius: 15px;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  color: var(--text-color);
-  font-family: "Unbounded-light";
-  font-size: 16px;
-  position: relative;
-  top: 0;
-  left: 0;
-}
-.add:hover {
-  background-color: var(--primary-color);
-  color: #b8d6ff;
-  transition: all 0.4s cubic-bezier(0.3, 0.7, 0.1, 1.9);
-  top: -5px;
-}
 .deleteBtn,
 .btn {
   background-color: #b8d6ff;
   border: 1px solid #0a1410;
   border-radius: 50%;
-  height: 40px;
-  width: 40px;
+  height: 26px;
+  width: 26px;
   cursor: pointer;
   position: relative;
   top: 0;
   left: 0;
-  font-size: 20px;
+  font-size: 14px;
 }
 .checkBtn {
   background-color: #b8d6ff;
   border: 1px solid #0a1410;
   border-radius: 50%;
-  height: 30px;
-  width: 30px;
+  height: 20px;
+  width: 20px;
   cursor: pointer;
   position: relative;
   top: 0;
@@ -154,20 +152,48 @@ ul {
 }
 .task-content {
   width: 8em;
-  padding: 5px;
+  padding: 2px;
   border: none;
   background-color: rgb(156, 200, 214);
   font-size: 0.85rem;
 }
 
 @media all and (min-width: 501px) {
+  .deleteBtn,
+  .btn {
+    height: 40px;
+    width: 40px;
+    font-size: 20px;
+  }
   #to-do-list-container {
     width: 500px;
   }
   .taskName {
-    width: 60%;
+    width: 80%;
   }
   .task-content {
     width: 14em;
+    padding: 8px;
+  }
+  .checkBtn {
+    height: 30px;
+    width: 30px;
+  }
+  ul {
+    margin: 0 20px;
+  }
+  h1 {
+    font-size: 32px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  h3 {
+    font-size: 19px;
+  }
+  input,
+  span,
+  button {
+    font-size: 14px;
   }
 }

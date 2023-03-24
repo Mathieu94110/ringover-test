@@ -103,10 +103,7 @@ const updateTask = async (taskInfos) => {
 };
 
 //
-
 const inpSearch = document.querySelector(".inpSearch");
-const addButton = document.querySelector(".add");
-const textArea = document.querySelector(".inp");
 const tasksList = document.querySelector(".ul");
 const tasksForm = document.getElementById("to-do-list-container");
 
@@ -115,7 +112,7 @@ tasksForm.addEventListener("submit", async (event) => {
   const label = tasksForm.elements["label"].value;
   const description = tasksForm.elements["description"].value;
   const endDate = document.getElementById("end_date").value;
-  const end_date = endDate + "T12:00:00Z";
+  const end_date = endDate + "T12:00:00Z"; // change this
 
   const newTask = {
     label: label,
@@ -127,6 +124,7 @@ tasksForm.addEventListener("submit", async (event) => {
 
   const response = await postTask(newTask);
   if (response && response.ok) {
+    tasksForm.reset();
     main();
   }
 });
@@ -145,31 +143,10 @@ async function main() {
     });
   }
 
-  textArea.addEventListener("keydown", function (event) {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-      const inputValue = textArea.value;
-      if (inputValue === "") {
-        return;
-      }
-      const task = {
-        id: new Date().getTime(),
-        description: inputValue,
-        isCompleted: false,
-      };
-
-      tasks.push(task);
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-      // createTask(task);
-      tasksForm.reset();
-      textArea.focus();
-    }
-  });
-
   async function addTasks(task) {
     console.log(task);
     const taskEl = document.createElement("li");
-    taskEl.setAttribute("id", task.id);
+    taskEl.setAttribute("id", task.label);
 
     if (task.isCompleted) {
       taskEl.classList.add("complete");
@@ -180,7 +157,7 @@ async function main() {
   <span ${!task.isCompleted ? "contenteditable" : ""} class="task-content">${
       task.description
     }</span>
-  <input type="checkbox" name="tasks" id="${task.id}" class="checkBtn" ${
+  <input type="checkbox" name="tasks" id="${task.label}" class="checkBtn" ${
       task.isCompleted ? "checked" : ""
     }>
   <button class="remove-task deleteBtn"><i class='fa-solid fa-trash'></i></button>
@@ -203,13 +180,15 @@ async function main() {
   });
 
   function removeTask(taskId) {
-    console.log(taskId);
     tasks = tasks.filter((task) => {
       task.id !== parseInt(taskId);
     });
-
     localStorage.setItem("tasks", JSON.stringify(tasks));
-    document.getElementById(taskId).remove();
+    console.log(document.getElementById(taskId));
+    const liElements = document.querySelectorAll(`li[id^=${taskId}]`);
+    if (liElements.length > 0) {
+      liElements[0].remove();
+    }
   }
 
   tasksList.addEventListener("input", (e) => {
@@ -224,7 +203,6 @@ async function main() {
     } else {
       const span = el.previousElementSibling;
       const parent = el.closest("li");
-
       task.isCompleted = !task.isCompleted;
       if (task.isCompleted) {
         span.removeAttribute("contenteditable");
@@ -239,16 +217,15 @@ async function main() {
 
   // filtered
 
-  tasksList.addEventListener("click", (e) => {
+  tasksList.addEventListener("click", async (e) => {
     if (
       e.target.classList.contains("remove-task") ||
       e.target.parentElement.classList.contains("remove-task")
     ) {
       e.preventDefault();
       const taskId = e.target.closest("li").id;
-      // const taskLabel = "labeltasks2";
-      // deleteTask(taskLabel);
-      removeTask(taskId);
+      await removeTask(taskId);
+      await deleteTask(taskId);
     }
   });
 }
