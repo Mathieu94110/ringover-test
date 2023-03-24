@@ -35,6 +35,13 @@ const getTask = async (label) => {
   }
 };
 
+// const data = {
+//   label: "Poubelles",
+//   description: "Sortir la poubelle orange",
+//   start_date: "2023-03-24T10:00:00Z",
+//   end_date: "2023-03-26T10:00:00Z",
+// };
+
 const postTask = async (taskInfos) => {
   try {
     const response = await fetch(baseUrl, {
@@ -104,14 +111,6 @@ const updateTask = async (taskInfos) => {
   }
 };
 
-// const data = {
-//   label: "Poubelles",
-//   description: "Sortir la poubelle orange",
-//   start_date: "2023-03-24T10:00:00Z",
-//   end_date: "2023-03-25T10:00:00Z",
-// };
-// updateTask(data);
-
 //
 
 const inpSearch = document.querySelector(".inpSearch");
@@ -120,9 +119,26 @@ const textArea = document.querySelector(".inp");
 const tasksList = document.querySelector(".ul");
 const tasksForm = document.getElementById("to-do-list-container");
 
+tasksForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const label = tasksForm.elements["label"].value;
+  const description = tasksForm.elements["description"].value;
+  const endDate = tasksForm.elements["end_date"].value;
+
+  console.log(
+    "label =",
+    label,
+    "description =",
+    description,
+    "endDate =",
+    endDate
+  );
+  // handle the form data
+});
+
 async function main() {
   let tasks = await getTasks();
-
+  console.log(tasks);
   if (tasks && tasks.length > 0) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   } else {
@@ -177,7 +193,7 @@ async function main() {
   <span ${!task.isCompleted ? "contenteditable" : ""} class="task-content">${
       task.description
     }</span>
-  <input type="checkbox" name="tasks" id="${task.id}" class="editBtn" ${
+  <input type="checkbox" name="tasks" id="${task.id}" class="checkBtn" ${
       task.isCompleted ? "checked" : ""
     }>
   <button class="remove-task deleteBtn"><i class='fa-solid fa-trash'></i></button>

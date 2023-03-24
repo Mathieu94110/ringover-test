@@ -24,8 +24,7 @@ body {
   align-items: space-between;
   text-align: center;
   background-color: var(--secondary-color);
-  min-height: 400px;
-  width: 500px;
+  width: 280px;
   font-family: "Unbounded-Regular";
   border-radius: 50px;
   border: inset 5px solid #ffe1b8;
@@ -45,23 +44,31 @@ input {
   text-align: center;
   height: 30px;
   width: 60%;
+  margin: 4px auto;
   box-shadow: inset;
   background-color: #e5f0ff;
 }
 
 .inpSearch {
   width: 67%;
+  font-family: "Unbounded-light";
+  border: 1px solid #0a1410;
+  border-radius: 15px;
 }
-
+.validTaskBtn {
+  padding: 4px;
+  margin-top: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
 .taskName {
   display: flex;
-  width: 60%;
-  text-align: left;
-  padding-left: 10px;
+  width: auto;
   padding-top: 5px;
   background-color: #ffe1b8;
   border-radius: 15px;
   align-items: center;
+  width: 90%;
 }
 
 ul {
@@ -97,7 +104,7 @@ ul {
   top: -5px;
 }
 .deleteBtn,
-.editBtn {
+.btn {
   background-color: #b8d6ff;
   border: 1px solid #0a1410;
   border-radius: 50%;
@@ -109,18 +116,43 @@ ul {
   left: 0;
   font-size: 20px;
 }
+.checkBtn {
+  background-color: #b8d6ff;
+  border: 1px solid #0a1410;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+  position: relative;
+  top: 0;
+  left: 0;
+  font-size: 20px;
+}
 
 .deleteBtn:hover,
-.editBtn:hover {
+.btn:hover,
+.validTaskBtn:hover {
   background-color: var(--primary-color);
   color: #b8d6ff;
   transition: all 0.4s cubic-bezier(0.3, 0.7, 0.1, 1.9);
   top: -5px;
 }
 .task-content {
-  width: 12em;
+  width: 8em;
   padding: 5px;
   border: none;
   background-color: rgb(156, 200, 214);
   font-size: 0.85rem;
+}
+
+@media all and (min-width: 501px) {
+  #to-do-list-container {
+    width: 500px;
+  }
+  .taskName {
+    width: 60%;
+  }
+  .task-content {
+    width: 14em;
+  }
 }

@@ -24,29 +24,37 @@
           />
         </div>
         <br />
-
-        <h1>Ajouter une tâche</h1>
+        <h2>Ajouter une tâche</h2>
         <div>
-          <input type="text" class="inp" placeholder="Ajouter un label" />
-          <button class="add"><i class="fa-solid fa-plus"></i></button>
+          <input
+            type="text"
+            class="inp"
+            placeholder="Ajouter un label"
+            id="label"
+            name="label"
+          />
         </div>
         <div>
           <input
             type="text"
             class="inp"
             placeholder="Ajouter une description"
+            id="description"
+            name="description"
           />
-          <button class="add"><i class="fa-solid fa-plus"></i></button>
         </div>
         <div>
           <input
             type="text"
             class="inp"
             placeholder="Ajouter une date de fin"
+            id="end_date"
+            name="end_date"
           />
-          <button class="add"><i class="fa-solid fa-plus"></i></button>
         </div>
-
+        <div>
+          <button type="submit" class="validTaskBtn">Valider la tâche</button>
+        </div>
         <div>
           <h2>Tâches existantes :</h2>
           <ul class="ul"></ul>
