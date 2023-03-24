@@ -89,7 +89,7 @@ const updateTask = async (taskInfos) => {
       body: JSON.stringify(taskInfos),
     });
     if (response.status == 200) {
-      return alert("Tâche mise à jour !");
+      return alert("La date de fin de la tâche a été mise à jour !");
     } else if (response.status == 400) {
       return alert("Mauvaise requete !");
     } else if (response.status == 404) {
@@ -102,7 +102,6 @@ const updateTask = async (taskInfos) => {
   }
 };
 
-//
 const inpSearch = document.querySelector(".inpSearch");
 const tasksList = document.querySelector(".ul");
 const tasksForm = document.getElementById("to-do-list-container");
@@ -111,25 +110,11 @@ tasksForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const label = tasksForm.elements["label"].value;
   const description = tasksForm.elements["description"].value;
-  const endDate = document.getElementById("end_date").value;
-
-  const d = new Date();
-  const end_date =
-    endDate +
-    "T" +
-    d.getHours() +
-    ":" +
-    d.getMinutes() +
-    ":" +
-    d.getSeconds() +
-    "Z";
 
   const newTask = {
     label: label,
     description: description,
     start_date: new Date().toISOString(),
-    end_date: end_date,
-    isCompleted: false,
   };
 
   const response = await postTask(newTask);
@@ -148,12 +133,16 @@ async function addTasks(task) {
     }
     const taskElMarkup = `
   <div class="taskName">
-  <span ${!task.isCompleted ? "contenteditable" : ""} class="task-content">${
-      task.description
-    }</span>
-  <input type="checkbox" name="tasks" id="${task.label}" class="checkBtn" ${
-      task.isCompleted ? "checked" : ""
-    }>
+  <span  class="task-content">${task.description}</span>
+    <input
+    type="date"
+    min="2023-03-24"
+    max="2030-12-31"
+    id="end_date"
+    name="end_date"
+    pattern="\d{4}-\d{2}-\d{2}"
+    class="dateInput"
+    />
   <button class="remove-task deleteBtn"><i class='fa-solid fa-trash'></i></button>
   </div>
   `;
@@ -165,7 +154,6 @@ async function addTasks(task) {
 async function main() {
   let tasks = await getTasks();
   if (tasks && tasks.length > 0) {
-    console.log(tasks);
     tasks.map((task) => {
       addTasks(task);
     });
@@ -181,14 +169,37 @@ async function main() {
     ) {
       const taskId = e.target.closest("li").id;
       removeTask(taskId);
+    } else if (
+      e.target.classList.contains("dateInput") ||
+      e.target.parentElement.classList.contains("dateInput")
+    ) {
+      tasksList.querySelectorAll(".dateInput").forEach((inputElement) => {
+        const taskId = e.target.closest("li").id;
+        inputElement.addEventListener("change", (event) => {
+          updateTaskEndDate(event, taskId);
+        });
+      });
     }
   });
+
+  // detect when end_date is choosen or changed in tasks list
+
+  function updateTaskEndDate(event, taskId) {
+    const date = event.target.value;
+    if (date && taskId) {
+      const isoDate = new Date(date).toISOString();
+      const taskInfos = {
+        label: taskId,
+        end_date: isoDate,
+      };
+      updateTask(taskInfos);
+    }
+  }
 
   function removeTask(taskId) {
     tasks = tasks.filter((task) => {
       task.id !== parseInt(taskId);
     });
-    console.log(document.getElementById(taskId));
     document.getElementById(taskId).remove();
   }
 
@@ -197,25 +208,7 @@ async function main() {
     updateTaskOnClient(taskId, e.target);
   });
 
-  function updateTaskOnClient(taskId, el) {
-    const task = tasks.find((task) => task.id === parseInt(taskId));
-    if (el.hasAttribute("contenteditable")) {
-      task.name = el.textContent;
-    } else {
-      const span = el.previousElementSibling;
-      const parent = el.closest("li");
-      task.isCompleted = !task.isCompleted;
-      if (task.isCompleted) {
-        span.removeAttribute("contenteditable");
-        parent.classList.add("complete");
-      } else {
-        span.setAttribute("contenteditable", "true");
-        parent.classList.remove("complete");
-      }
-    }
-  }
-
-  // filtered
+  // filter Coming soon !!
 
   tasksList.addEventListener("click", async (e) => {
     if (
