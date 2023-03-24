@@ -112,7 +112,17 @@ tasksForm.addEventListener("submit", async (event) => {
   const label = tasksForm.elements["label"].value;
   const description = tasksForm.elements["description"].value;
   const endDate = document.getElementById("end_date").value;
-  const end_date = endDate + "T12:00:00Z"; // change this
+
+  const d = new Date();
+  const end_date =
+    endDate +
+    "T" +
+    d.getHours() +
+    ":" +
+    d.getMinutes() +
+    ":" +
+    d.getSeconds() +
+    "Z";
 
   const newTask = {
     label: label,
@@ -125,33 +135,17 @@ tasksForm.addEventListener("submit", async (event) => {
   const response = await postTask(newTask);
   if (response && response.ok) {
     tasksForm.reset();
-    main();
+    addTasks(newTask);
   }
 });
 
-async function main() {
-  let tasks = await getTasks();
-  if (tasks && tasks.length > 0) {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  } else {
-    localStorage.setItem("tasks", []);
-  }
-
-  if (localStorage.getItem("tasks")) {
-    tasks.map((task) => {
-      addTasks(task);
-    });
-  }
-
-  async function addTasks(task) {
-    console.log(task);
+async function addTasks(task) {
+  if (task && task.label) {
     const taskEl = document.createElement("li");
     taskEl.setAttribute("id", task.label);
-
     if (task.isCompleted) {
       taskEl.classList.add("complete");
     }
-
     const taskElMarkup = `
   <div class="taskName">
   <span ${!task.isCompleted ? "contenteditable" : ""} class="task-content">${
@@ -163,10 +157,21 @@ async function main() {
   <button class="remove-task deleteBtn"><i class='fa-solid fa-trash'></i></button>
   </div>
   `;
-
     taskEl.innerHTML = taskElMarkup;
     tasksList.appendChild(taskEl);
   }
+}
+
+async function main() {
+  let tasks = await getTasks();
+  if (tasks && tasks.length > 0) {
+    console.log(tasks);
+    tasks.map((task) => {
+      addTasks(task);
+    });
+  }
+
+  addTasks(tasks);
 
   tasksList.addEventListener("click", (e) => {
     if (
@@ -183,12 +188,8 @@ async function main() {
     tasks = tasks.filter((task) => {
       task.id !== parseInt(taskId);
     });
-    localStorage.setItem("tasks", JSON.stringify(tasks));
     console.log(document.getElementById(taskId));
-    const liElements = document.querySelectorAll(`li[id^=${taskId}]`);
-    if (liElements.length > 0) {
-      liElements[0].remove();
-    }
+    document.getElementById(taskId).remove();
   }
 
   tasksList.addEventListener("input", (e) => {
@@ -212,7 +213,6 @@ async function main() {
         parent.classList.remove("complete");
       }
     }
-    localStorage.setItem("tasks", JSON.stringify(tasks));
   }
 
   // filtered
@@ -224,7 +224,6 @@ async function main() {
     ) {
       e.preventDefault();
       const taskId = e.target.closest("li").id;
-      await removeTask(taskId);
       await deleteTask(taskId);
     }
   });
