@@ -3,15 +3,16 @@
 Réponse: Faux, les variables éxistent en Css, elles sont utilisées dans la pseudo class :root.
 
 2. Quelle est la différence entre ces différentes méthodes de stockage :
+
 a. Cookie
 b. SessionStorage
 c. LocalStorage
 
-Réponse: Les cookies sont utilisés pour stoquer des données non sensibles, elles sont envoyées à chaque requete aus serveur,
+Réponse: Les cookies sont utilisés pour stoquer des données non sensibles, elles sont envoyées à chaque requete au serveur,
 et leur taille est limitée à 4Ko.
 Contrairement aux cookies, le session storage est utilisé pour stoquer des données sensibles et les données sont spécifiques au site concerné et non partagées , les données ne sont stoquées que pour la session en cours et sont supprimées 
-lorsque l'utilisateur ferme le navigateur son espace de stoquage est limité à 4mo.
-Le LocalStorage permet de stoquer de plus grandes quantités de données 10 mb, mais contraiement au localStorage les données ne sont pas supprimées lorsque l'utilisateur ferme le navigateur.
+lorsque l'utilisateur ferme le navigateur, son espace de stoquage est limité à 4mo.
+Le localStorage permet de stoquer de plus grandes quantités de données (10 mb), mais contraiement au sessionStorage les données ne sont pas supprimées lorsque l'utilisateur ferme le navigateur.
 Il est utile pour que l'utilisateur accède ultérieurement à des données telles que les données hors-ligne.
 
 3. Quelles sont les règles CSS qui doivent être ajoutées pour appliquer un ellipsis sur un
@@ -24,27 +25,45 @@ Réponse: Il faut appliquer les règles Css suivantes, définir une width, indiq
 éléments déclenche au clic une alerte avec le texte du contenu. Comment et pourquoi
 optimisez-vous l’écoute d'événement dans ce cas ?
 
-Réponse: Je crée un id que je positionne sur la balise ul, qui contient les balises li, car le clique sur une des li va remonter (bubbling) à l'élément parent ul.
+Réponse: Je crée un id que je positionne sur la balise ul, qui contient les balises li.
 Je crée ensuite une méthode nommée par exemple alertListItemContent, qui va recevoir en paramètre event, et dans le corps de la fonction il faudrait disposer un event.stopPropagation(),
-pour que l'évènement ne remonte pas plus haut dans l'arbre du DOM ce qui pourrait déclencher l'événement click sur un élément parent et donc un résultat non souhaité.
-Ensuite je crée en dehors de ma fonction une variable qui contiendra le contenu de ul nommée longList.
-Dans la méthode alertListItemContent  je rajoute for(let i= 0 ; i < longList.children.length, i++ ){let child = longList.children[i]; alert(child.textContent)}
+pour que l'évènement ne remonte pas plus haut dans l'arbre du DOM (bubbling) ce qui pourrait déclencher l'événement click sur un élément parent et donc un résultat non souhaité.
+Ensuite je crée en dehors de ma fonction une variable qui contiendra le contenu de l'ul nommée longList.
+Dans la méthode alertListItemContent je rajoute for(let i= 0 ; i < longList.children.length, i++ ){
+  let child = longList.children[i]; alert(child.textContent)
+}
 
 5. Quelles sont les différences entre les types de variable suivants : var, let et const ?
-Réponse: 
 
-
+Réponse: "var" est une variable globale, qui a donc une portée équivalente à toute la page sur laquelle elle est déclarée.Si elle n'est pas déclarée à l'intérieur d'une fonction dans ce dernier cas sa portée est limitée au corps de sa fonction.
+Aussi var peut etre redéclarer sans déclencher d'erreur et toute modification de la valeur de cette variable meme si c'est dans le contexte d'éxécution d'une fonction modifiera la valeur précédente.
+"let" crée une variable qui peut etre modifiée mais pas redéclarer avec le meme nom contrairement à var et lorsqu'elle est décarée dans un bloc d'instruction on ne peut y accéder en dehors, elle ne sera pas définie.
+On peut cependant la déclarée plusieurs fois mais dans des contextes différents. 
+"const" à la différence de let et var doit recevoir obligatoirement une valeur et sa valeur restera inchangée tout au long du contexte dans lequel elle est déclarée.
+On ne peut ni la redéclarée comme var ni lui assigner une nouvelle valeur comme let et var.
+var est initialisée à undefined, let et const ne le sont pas.
 
 6. Quels sont les différents avantages à l’utilisation des outils de développement
 “Performances” et “Mémoire” dans les navigateurs Firefox et Chromium ?
-Réponse: 
+
+Réponse: Ces outils permettent de voir les différents sites et leur consommation effective de manière précise.
+Par exemple pour vérifier si un onglet utilise les ressources de manière anormale avec la possibilité de suspendre l'activité de ses onglets.
+Firefox a une fonction interne qui décharge une partie des onglets, ou lorsque la mémoire sature.
+google chrome dans le menu outils performance offre a possibilité d'activer l'économiseur de mémoire et d'économiser l'alimentation.
+Ces 2 navigateurs offre la possibilité d'ajouter des extensions permettant de suspendre l'activité de certaines pages ouvertes en onglet.
 
 7. Quelle a été votre tâche la plus ardue face à laquelle vous vous êtes confronté au cours
 de votre expérience professionnelle ?
-Réponse: 
+
+Réponse: J'ai eu en charge de débugguer un panel suivit du candidat surr un Ats sur lequel j'ai travaillé au cours de mon précédent stage chez marvin-recruiter.
+Le panel avait une rubrique qui n'apparaissait pas et la mise à jour des informations candidat ne s'éffectuait pas de manière réactive. J'ai du vérifier toutes les propriétés 
+qui étaient renvoyées de par les pages qui y était liées ainsi que toutes les informations qui était retounées en temps réel
+ depuis le store puis disposer des observables pour écouter certain événements et forcer un re-rendu des composants du panel.
 
 8. Quelle est la dernière chose que vous avez apprise récemment ?
-Réponse: 
+
+Réponse: Effectuer des tests e2e avec Cypress et héberger un projet fullstack sur un vps.
 
 9. Cette année, quelle techno aimeriez-vous apprendre et utiliser ?
-Réponse:
+
+Réponse: Augmenter mes compétences en Javascript notamment en étudiant de manière plus approfondie NodeJs, et améliorer mes compétences sur la partie algorythmique, afin d'avoir la possibilité de faire évoluer rapidement mes projets et mes compétences.
