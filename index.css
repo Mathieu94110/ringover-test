@@ -16,6 +16,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 50px 0;
 }
 
 #to-do-list-container {
@@ -33,7 +34,8 @@ body {
 }
 
 h1,
-h2 {
+h2,
+h3 {
   color: var(--text-color);
 }
 
@@ -47,6 +49,17 @@ input {
   margin: 4px auto;
   box-shadow: inset;
   background-color: #e5f0ff;
+}
+
+.dateInput {
+  font-family: "Unbounded-light";
+  border: 1px solid #0a1410;
+  border-radius: 0px;
+  text-align: center;
+  height: 30px;
+  margin-bottom: 20px;
+  width: auto;
+  cursor: pointer;
 }
 
 .inpSearch {
@@ -73,6 +86,8 @@ input {
 
 ul {
   padding: 0;
+  max-height: 260px;
+  overflow: auto;
 }
 
 .ul li {

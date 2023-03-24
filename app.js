@@ -35,13 +35,6 @@ const getTask = async (label) => {
   }
 };
 
-// const data = {
-//   label: "Poubelles",
-//   description: "Sortir la poubelle orange",
-//   start_date: "2023-03-24T10:00:00Z",
-//   end_date: "2023-03-26T10:00:00Z",
-// };
-
 const postTask = async (taskInfos) => {
   try {
     const response = await fetch(baseUrl, {
@@ -52,7 +45,7 @@ const postTask = async (taskInfos) => {
       body: JSON.stringify(taskInfos),
     });
     if (response.status == 201) {
-      return alert("Tâche crée !");
+      return response;
     } else if (response.status == 400) {
       return alert("Mauvaise requete !");
     } else if (response.status == 409) {
@@ -60,12 +53,11 @@ const postTask = async (taskInfos) => {
     } else if (response.status == 500) {
       return alert("Problème de serveur!");
     }
+    return response;
   } catch (error) {
     throw error;
   }
 };
-
-// postTask(data);
 
 const deleteTask = async (label) => {
   try {
@@ -96,7 +88,6 @@ const updateTask = async (taskInfos) => {
       },
       body: JSON.stringify(taskInfos),
     });
-    console.log("res", response);
     if (response.status == 200) {
       return alert("Tâche mise à jour !");
     } else if (response.status == 400) {
@@ -119,26 +110,29 @@ const textArea = document.querySelector(".inp");
 const tasksList = document.querySelector(".ul");
 const tasksForm = document.getElementById("to-do-list-container");
 
-tasksForm.addEventListener("submit", (event) => {
+tasksForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const label = tasksForm.elements["label"].value;
   const description = tasksForm.elements["description"].value;
-  const endDate = tasksForm.elements["end_date"].value;
+  const endDate = document.getElementById("end_date").value;
+  const end_date = endDate + "T12:00:00Z";
 
-  console.log(
-    "label =",
-    label,
-    "description =",
-    description,
-    "endDate =",
-    endDate
-  );
-  // handle the form data
+  const newTask = {
+    label: label,
+    description: description,
+    start_date: new Date().toISOString(),
+    end_date: end_date,
+    isCompleted: false,
+  };
+
+  const response = await postTask(newTask);
+  if (response && response.ok) {
+    main();
+  }
 });
 
 async function main() {
   let tasks = await getTasks();
-  console.log(tasks);
   if (tasks && tasks.length > 0) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   } else {
@@ -147,7 +141,7 @@ async function main() {
 
   if (localStorage.getItem("tasks")) {
     tasks.map((task) => {
-      createTask(task);
+      addTasks(task);
     });
   }
 
@@ -163,24 +157,17 @@ async function main() {
         description: inputValue,
         isCompleted: false,
       };
-      /*
-      model
-      const task = {
-          label: "labeltasks"
-        description: inputValue,
-     start_date:new Date().getTime(),
-             end_date://example: "2022-01-01T15:00:00Z"
-      };*/
 
       tasks.push(task);
       localStorage.setItem("tasks", JSON.stringify(tasks));
-      createTask(task);
+      // createTask(task);
       tasksForm.reset();
       textArea.focus();
     }
   });
 
-  function createTask(task) {
+  async function addTasks(task) {
+    console.log(task);
     const taskEl = document.createElement("li");
     taskEl.setAttribute("id", task.id);
 
@@ -227,10 +214,10 @@ async function main() {
 
   tasksList.addEventListener("input", (e) => {
     const taskId = e.target.closest("li").id;
-    updateTask(taskId, e.target);
+    updateTaskOnClient(taskId, e.target);
   });
 
-  function updateTask(taskId, el) {
+  function updateTaskOnClient(taskId, el) {
     const task = tasks.find((task) => task.id === parseInt(taskId));
     if (el.hasAttribute("contenteditable")) {
       task.name = el.textContent;

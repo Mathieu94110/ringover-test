@@ -43,13 +43,17 @@
             name="description"
           />
         </div>
+        <h3>Date de fin</h3>
         <div>
           <input
-            type="text"
-            class="inp"
-            placeholder="Ajouter une date de fin"
+            type="date"
+            min="2023-03-24"
+            max="2030-12-31"
             id="end_date"
             name="end_date"
+            required
+            pattern="\d{4}-\d{2}-\d{2}"
+            class="dateInput"
           />
         </div>
         <div>
