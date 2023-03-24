@@ -18,7 +18,7 @@ body {
   align-items: center;
 }
 
-.to-do-list-container {
+#to-do-list-container {
   display: flex;
   flex-direction: column;
   align-items: space-between;
@@ -61,6 +61,7 @@ input {
   padding-top: 5px;
   background-color: #ffe1b8;
   border-radius: 15px;
+  align-items: center;
 }
 
 ul {

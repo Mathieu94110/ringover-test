@@ -1,0 +1,50 @@
+1. Les variables existent en Javascript mais n’existent ni en HTML ni en CSS. Vrai ou Faux ?
+
+Réponse: Faux, les variables éxistent en Css, elles sont utilisées dans la pseudo class :root.
+
+2. Quelle est la différence entre ces différentes méthodes de stockage :
+a. Cookie
+b. SessionStorage
+c. LocalStorage
+
+Réponse: Les cookies sont utilisés pour stoquer des données non sensibles, elles sont envoyées à chaque requete aus serveur,
+et leur taille est limitée à 4Ko.
+Contrairement aux cookies, le session storage est utilisé pour stoquer des données sensibles et les données sont spécifiques au site concerné et non partagées , les données ne sont stoquées que pour la session en cours et sont supprimées 
+lorsque l'utilisateur ferme le navigateur son espace de stoquage est limité à 4mo.
+Le LocalStorage permet de stoquer de plus grandes quantités de données 10 mb, mais contraiement au localStorage les données ne sont pas supprimées lorsque l'utilisateur ferme le navigateur.
+Il est utile pour que l'utilisateur accède ultérieurement à des données telles que les données hors-ligne.
+
+3. Quelles sont les règles CSS qui doivent être ajoutées pour appliquer un ellipsis sur un
+texte (réduire dynamiquement la longueur d’un texte afin qu’il ne dépasse pas son
+container et sans qu’il n’aille à la ligne) ?
+
+Réponse: Il faut appliquer les règles Css suivantes, définir une width, indiqué white-space: nowrap, overflow:hidden, text-overflow: elipsis.
+
+4. Vous êtes face à une liste de 1000 éléments (<li></li>) pour lesquels chacun de ces
+éléments déclenche au clic une alerte avec le texte du contenu. Comment et pourquoi
+optimisez-vous l’écoute d'événement dans ce cas ?
+
+Réponse: Je crée un id que je positionne sur la balise ul, qui contient les balises li, car le clique sur une des li va remonter (bubbling) à l'élément parent ul.
+Je crée ensuite une méthode nommée par exemple alertListItemContent, qui va recevoir en paramètre event, et dans le corps de la fonction il faudrait disposer un event.stopPropagation(),
+pour que l'évènement ne remonte pas plus haut dans l'arbre du DOM ce qui pourrait déclencher l'événement click sur un élément parent et donc un résultat non souhaité.
+Ensuite je crée en dehors de ma fonction une variable qui contiendra le contenu de ul nommée longList.
+Dans la méthode alertListItemContent  je rajoute for(let i= 0 ; i < longList.children.length, i++ ){let child = longList.children[i]; alert(child.textContent)}
+
+5. Quelles sont les différences entre les types de variable suivants : var, let et const ?
+Réponse: 
+
+
+
+6. Quels sont les différents avantages à l’utilisation des outils de développement
+“Performances” et “Mémoire” dans les navigateurs Firefox et Chromium ?
+Réponse: 
+
+7. Quelle a été votre tâche la plus ardue face à laquelle vous vous êtes confronté au cours
+de votre expérience professionnelle ?
+Réponse: 
+
+8. Quelle est la dernière chose que vous avez apprise récemment ?
+Réponse: 
+
+9. Cette année, quelle techno aimeriez-vous apprendre et utiliser ?
+Réponse:
