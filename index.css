@@ -42,6 +42,13 @@ label {
   text-align: center;
   font-weight: bold;
 }
+#label-details,
+#description-details,
+#creation-details,
+#end-details {
+  color: #000;
+  font-weight: bold;
+}
 
 h1 {
   font-size: 22px;
@@ -67,7 +74,12 @@ input {
   box-shadow: inset;
   background-color: #e5f0ff;
 }
-
+#label,
+#description,
+#search-by-start-date,
+#search-by-end-date {
+  font-size: 12px;
+}
 .search-by-text {
   display: flex;
   flex-direction: column;
@@ -110,15 +122,15 @@ input {
   cursor: pointer;
   font-weight: bold;
 }
-.taskName {
+.task-name {
   display: flex;
   justify-content: end;
-  width: auto;
-  padding-top: 5px;
+  padding: 5px;
   background-color: #ffe1b8;
   border-radius: 15px;
   align-items: center;
-  width: 100%;
+  width: 84%;
+  margin: 0 8%;
   overflow-x: hidden;
 }
 
@@ -126,7 +138,6 @@ ul {
   padding: 0;
   max-height: 260px;
   overflow-y: auto;
-  margin: 0 10px;
 }
 
 .ul li {
@@ -167,12 +178,15 @@ ul {
 }
 
 .deleteBtn:hover,
-.btn:hover,
+.detailsBtn:hover,
 .validTaskBtn:hover {
   background-color: var(--primary-color);
   color: #b8d6ff;
   transition: all 0.4s cubic-bezier(0.3, 0.7, 0.1, 1.9);
-  top: -5px;
+}
+
+.task-start {
+  display: none;
 }
 .task-content,
 .task-end {
@@ -180,13 +194,15 @@ ul {
   font-size: 0.85rem;
   flex: 1 1 auto;
   text-align: left;
-  width: 130px;
+  width: 70px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
+.task-start,
 .task-end {
   text-align: center;
+  width: auto;
 }
 #favDialog {
   width: 250px;
@@ -198,7 +214,7 @@ ul {
 @media all and (min-width: 501px) {
   .deleteBtn,
   .detailsBtn {
-    height: 34px;
+    height: 28px;
     width: 34px;
     margin-left: 10px;
   }
@@ -212,13 +228,19 @@ ul {
     font-size: 18px;
   }
 
-  .taskName {
-    width: 100%;
-  }
   .task-content,
+  .task-start,
   .task-end {
     padding: 8px;
-    width: 300px;
+    width: 130px;
+  }
+  .task-start {
+    display: flex;
+    font-weight: bold;
+    font-size: 0.85rem;
+    flex: 1 1 auto;
+    text-align: left;
+    width: 130px;
   }
   .checkBtn {
     height: 30px;
@@ -237,5 +259,11 @@ ul {
   span,
   button {
     font-size: 14px;
+  }
+  #label,
+  #description,
+  #search-by-start-date,
+  #search-by-end-date {
+    font-size: 16px;
   }
 }

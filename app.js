@@ -1,4 +1,4 @@
-const tasksList = document.querySelector(".ul");
+const tasksList = document.querySelector(".tasks-list");
 const tasksDetails = document.getElementById("favDialog");
 const tasksForm = document.getElementById("to-do-list-form");
 const labelDetails = document.getElementById("label-details");
@@ -126,8 +126,9 @@ async function addTasks(task) {
       taskEl.classList.add("complete");
     }
     const taskElMarkup = `
-  <div class="taskName">
+  <div class="task-name">
   <span  class="task-content">${task.label}</span>
+  <span  class="task-start">${formatDate(task.start_date)}</span>
   <button onclick="" class="detailsBtn"  id="${
     task.label
   }"><i class="fa-solid fa-magnifying-glass"></i> </button>
@@ -185,7 +186,9 @@ async function onOpen(label) {
     labelDetails.innerHTML = label;
     descriptionDetails.innerHTML = description;
     creationDetails.innerHTML = formatDate(start_date);
-    endDetails.innerHTML = end_date ? end_date : "Pas de date de fin";
+    endDetails.innerHTML = end_date
+      ? formatDate(end_date)
+      : "Pas de date de fin";
     dateWrapper.innerHTML = inputDetails;
     //
     if (typeof favDialog.showModal === "function") {
@@ -223,7 +226,17 @@ function closeTaskDetailsModal() {
 function formatDate(isoDate) {
   return isoDate.replace(/T.*/, "").split("-").reverse().join("-");
 }
+function formatDateUsToEn(date) {
+  return date.split("-").reverse().join("-");
+}
 
+function clearDateInputs() {
+  startDate = null;
+  endDate = null;
+  alert("La date de création ne peut pas etre postérieure à la date de fin");
+  searchByStartDate.value = "";
+  searchByEndDate.value = "";
+}
 // Events
 
 tasksList.addEventListener("click", async (e) => {
@@ -260,32 +273,7 @@ tasksForm.addEventListener("submit", async (event) => {
   }
 });
 
-// searchByText.addEventListener("keyup", function (e) {
-//   console.log(tasksList);
-//   const query = e.target.value.toLowerCase();
-//   tasks.forEach((task) => {
-//     task.label.toLowerCase().startsWith(query) ? task : null;
-//     // return task.label.toLowerCase().startsWith(query);
-//   });
-// });
-
-// filters
-
 searchByText.addEventListener("keyup", filterTasks);
-
-// function filterByText() {
-//   const query = searchByText.value.toLowerCase();
-//   let li = tasksList.querySelectorAll("li");
-//   for (let i = 0; i < li.length; i++) {
-//     let task = li[i];
-//     console.log(task);
-//     if (task.id.toLowerCase().indexOf(query) > -1) {
-//       task.style.display = "";
-//     } else {
-//       task.style.display = "none";
-//     }
-//   }
-// }
 
 function filterTasks() {
   const query = searchByText.value.toLowerCase();
@@ -306,28 +294,97 @@ function filterTasks() {
   } else {
     tasksFilteredByText = [];
   }
+  checkByDates();
 }
 
-// function filterByDates() {
-//   const query = searchByText.value.toLowerCase();
-//   let li = tasksList.querySelectorAll("li");
-//   let textArray = [];
-//   for (let i = 0; i < li.length; i++) {
-//     let task = li[i];
-//     console.log(task);
-//     if (task.id.toLowerCase().indexOf(query) > -1) {
-//       task.style.display = "";
-//       textArray.push(task);
-//     } else {
-//       task.style.display = "none";
-//     }
-//   }
-//   if (textArray.length > 0) {
-//     tasksFilteredByText = [...textArray];
-//   } else {
-//     tasksFilteredByText = [];
-//   }
-// }
+function checkByDates() {
+  if (tasksFilteredByText.length > 0) {
+    for (let i = 0; i < tasksFilteredByText.length; i++) {
+      let task = tasksFilteredByText[i];
+      let taskFilteredStart =
+        task.getElementsByClassName("task-start")[0].innerHTML;
+      let taskFilteredEnd =
+        task.getElementsByClassName("task-end")[0].innerHTML;
+      if (startDate && endDate && startDate > endDate) {
+        clearDateInputs();
+      } else if (startDate && endDate && startDate < endDate) {
+        if (taskFilteredStart === startDate && taskFilteredEnd === endDate) {
+          task.style.display = "";
+        } else {
+          task.style.display = "none";
+        }
+      } else if (startDate && endDate && startDate === endDate) {
+        if (taskFilteredStart === startDate && taskFilteredEnd === endDate) {
+          task.style.display = "";
+        } else {
+          task.style.display = "none";
+        }
+      } else if (startDate && !endDate) {
+        if (taskFilteredStart === startDate) {
+          task.style.display = "";
+        } else {
+          task.style.display = "none";
+        }
+      } else if (!startDate && endDate) {
+        if (taskFilteredEnd === endDate) {
+          task.style.display = "";
+        } else {
+          task.style.display = "none";
+        }
+      } else {
+        task.style.display = "";
+      }
+    }
+  } else {
+    for (let i = 0; i < tasks.length; i++) {
+      let task = tasks[i];
+      let taskStart = task.getElementsByClassName("task-start")[0].innerHTML;
+      let taskEnd = task.getElementsByClassName("task-end")[0].innerHTML;
+      if (startDate && endDate && startDate > endDate) {
+        clearDateInputs();
+      } else if (startDate && endDate && startDate < endDate) {
+        if (taskStart === startDate && taskEnd === endDate) {
+          console.log(
+            `la date de crea de ${taskStart} est sup ou egal a startDate et date de fin ${taskEnd} prevu <= endDate`
+          );
+          task.style.display = "";
+        } else {
+          console.log(
+            `la date de crea de ${taskStart} est < a startDate et date de fin ${taskEnd} prevu > endDate`
+          );
+          task.style.display = "none";
+        }
+      } else if (startDate && endDate && startDate === endDate) {
+        if (taskStart === startDate && taskEnd === endDate) {
+          console.log("");
+          task.style.display = "";
+        } else {
+          console.log("");
+          task.style.display = "none";
+        }
+      } else if (startDate && !endDate) {
+        if (taskStart === startDate) {
+          console.log("");
+          task.style.display = "";
+        } else {
+          console.log("");
+          task.style.display = "none";
+        }
+      } else if (!startDate && endDate) {
+        if (taskEnd === endDate) {
+          console.log("");
+          task.style.display = "";
+        } else {
+          console.log("");
+          task.style.display = "none";
+        }
+      } else {
+        console.log("");
+        task.style.display = "";
+      }
+    }
+  }
+}
 
 searchByStartDate.addEventListener("input", async (event) => {
   const date = event.target.value;
@@ -335,9 +392,8 @@ searchByStartDate.addEventListener("input", async (event) => {
 });
 
 function filterByStartDate(date) {
-  console.log(date);
-  startDate = date;
-  checkDateCases();
+  startDate = formatDateUsToEn(date);
+  filterTasks();
 }
 
 searchByEndDate.addEventListener("input", async (event) => {
@@ -346,27 +402,8 @@ searchByEndDate.addEventListener("input", async (event) => {
 });
 
 function filterByEndDate(date) {
-  console.log(date);
-  endDate = date;
-  checkDateCases();
-}
-
-function checkDateCases() {
-  if (startDate && endDate) {
-    console.log("jai les 2");
-    if (startDate > endDate) {
-      alert("La date de début ne peut pas etre après la date de fin");
-    } else if (startDate === endDate) {
-      filterByDates();
-    } else {
-    }
-  } else if (startDate && !endDate) {
-    console.log("jai que start");
-  } else if (!startDate && endDate) {
-    console.log("jai que end");
-  } else {
-    console.log("jai aucun");
-  }
+  endDate = formatDateUsToEn(date);
+  filterTasks();
 }
 
 async function main() {
