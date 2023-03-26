@@ -17,12 +17,30 @@
       <div class="to-do-list">
         <form id="to-do-list-form" action="">
           <h1>TO DO LIST</h1>
-          <div>
+          <div class="search-by-text">
+            <label>Rechercher par texte</label>
             <input
               type="text"
-              class="inpSearch"
-              placeholder="Rechercher par texte ou par date"
+              id="search-by-text"
             />
+          </div>
+         
+            <h2>Rechercher par date</h2>
+            <div class="search-by-date">
+              <div>
+            <label>Début</label>
+            <input
+              type="date"
+              id="search-by-start-date"
+            />
+          </div>
+          <div>
+            <label>Fin</label>
+            <input
+            type="date"
+            id="search-by-end-date"
+          />
+        </div>
           </div>
           <br />
           <h2>Ajouter une tâche</h2>

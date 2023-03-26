@@ -36,9 +36,11 @@ body {
 }
 
 h1,
-h2 {
+h2,
+label {
   color: var(--text-color);
   text-align: center;
+  font-weight: bold;
 }
 
 h1 {
@@ -66,6 +68,31 @@ input {
   background-color: #e5f0ff;
 }
 
+.search-by-text {
+  display: flex;
+  flex-direction: column;
+}
+.search-by-text label {
+  font-size: 14px;
+}
+
+.search-by-date {
+  display: flex;
+}
+.search-by-date > div {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.search-by-date label {
+  font-size: 16px;
+}
+.search-by-date > div > input {
+  width: auto;
+  cursor: pointer;
+}
+
 .dateInput {
   margin-left: 8px;
   font-family: "Unbounded-light";
@@ -77,17 +104,11 @@ input {
   cursor: pointer;
 }
 
-.inpSearch {
-  width: 67%;
-  font-family: "Unbounded-light";
-  border: 1px solid #0a1410;
-  border-radius: 15px;
-}
 .validTaskBtn {
   padding: 4px;
   margin-top: 6px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: bold;
 }
 .taskName {
   display: flex;
@@ -155,7 +176,7 @@ ul {
 }
 .task-content,
 .task-end {
-  font-weight: 600;
+  font-weight: bold;
   font-size: 0.85rem;
   flex: 1 1 auto;
   text-align: left;
@@ -184,6 +205,13 @@ ul {
   .to-do-list {
     width: 500px;
   }
+  .search-by-text label {
+    font-size: 24px;
+  }
+  .search-by-date label {
+    font-size: 18px;
+  }
+
   .taskName {
     width: 100%;
   }

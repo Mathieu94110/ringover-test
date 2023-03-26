@@ -1,4 +1,3 @@
-const inpSearch = document.querySelector(".inpSearch");
 const tasksList = document.querySelector(".ul");
 const tasksDetails = document.getElementById("favDialog");
 const tasksForm = document.getElementById("to-do-list-form");
@@ -9,7 +8,13 @@ const endDetails = document.getElementById("end-details");
 const detailsBtn = document.getElementsByClassName("detailsBtn");
 const dateInput = document.getElementsByClassName("dateInput");
 const dateWrapper = document.getElementById("input-date-wrapper");
-
+const searchByText = document.getElementById("search-by-text");
+const searchByStartDate = document.getElementById("search-by-start-date");
+const searchByEndDate = document.getElementById("search-by-end-date");
+let tasks = [];
+let tasksFilteredByText = [];
+let startDate = null;
+let endDate = null;
 // api
 const baseUrl = "http://127.0.0.1:9000/v1/tasks";
 
@@ -122,7 +127,7 @@ async function addTasks(task) {
     }
     const taskElMarkup = `
   <div class="taskName">
-  <span  class="task-content">${task.description}</span>
+  <span  class="task-content">${task.label}</span>
   <button onclick="" class="detailsBtn"  id="${
     task.label
   }"><i class="fa-solid fa-magnifying-glass"></i> </button>
@@ -254,10 +259,118 @@ tasksForm.addEventListener("submit", async (event) => {
     addTasks(newTask);
   }
 });
-//
+
+// searchByText.addEventListener("keyup", function (e) {
+//   console.log(tasksList);
+//   const query = e.target.value.toLowerCase();
+//   tasks.forEach((task) => {
+//     task.label.toLowerCase().startsWith(query) ? task : null;
+//     // return task.label.toLowerCase().startsWith(query);
+//   });
+// });
+
+// filters
+
+searchByText.addEventListener("keyup", filterTasks);
+
+// function filterByText() {
+//   const query = searchByText.value.toLowerCase();
+//   let li = tasksList.querySelectorAll("li");
+//   for (let i = 0; i < li.length; i++) {
+//     let task = li[i];
+//     console.log(task);
+//     if (task.id.toLowerCase().indexOf(query) > -1) {
+//       task.style.display = "";
+//     } else {
+//       task.style.display = "none";
+//     }
+//   }
+// }
+
+function filterTasks() {
+  const query = searchByText.value.toLowerCase();
+  let li = tasksList.querySelectorAll("li");
+  let textArray = [];
+  for (let i = 0; i < li.length; i++) {
+    let task = li[i];
+    console.log(task);
+    if (task.id.toLowerCase().indexOf(query) > -1) {
+      task.style.display = "";
+      textArray.push(task);
+    } else {
+      task.style.display = "none";
+    }
+  }
+  if (textArray.length > 0) {
+    tasksFilteredByText = [...textArray];
+  } else {
+    tasksFilteredByText = [];
+  }
+}
+
+// function filterByDates() {
+//   const query = searchByText.value.toLowerCase();
+//   let li = tasksList.querySelectorAll("li");
+//   let textArray = [];
+//   for (let i = 0; i < li.length; i++) {
+//     let task = li[i];
+//     console.log(task);
+//     if (task.id.toLowerCase().indexOf(query) > -1) {
+//       task.style.display = "";
+//       textArray.push(task);
+//     } else {
+//       task.style.display = "none";
+//     }
+//   }
+//   if (textArray.length > 0) {
+//     tasksFilteredByText = [...textArray];
+//   } else {
+//     tasksFilteredByText = [];
+//   }
+// }
+
+searchByStartDate.addEventListener("input", async (event) => {
+  const date = event.target.value;
+  filterByStartDate(date);
+});
+
+function filterByStartDate(date) {
+  console.log(date);
+  startDate = date;
+  checkDateCases();
+}
+
+searchByEndDate.addEventListener("input", async (event) => {
+  const date = event.target.value;
+  filterByEndDate(date);
+});
+
+function filterByEndDate(date) {
+  console.log(date);
+  endDate = date;
+  checkDateCases();
+}
+
+function checkDateCases() {
+  if (startDate && endDate) {
+    console.log("jai les 2");
+    if (startDate > endDate) {
+      alert("La date de début ne peut pas etre après la date de fin");
+    } else if (startDate === endDate) {
+      filterByDates();
+    } else {
+    }
+  } else if (startDate && !endDate) {
+    console.log("jai que start");
+  } else if (!startDate && endDate) {
+    console.log("jai que end");
+  } else {
+    console.log("jai aucun");
+  }
+}
 
 async function main() {
-  let tasks = await getTasks();
+  tasks = await getTasks();
   console.log(tasks);
   if (tasks && tasks.length > 0) {
     tasks.map((task) => {
