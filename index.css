@@ -19,23 +19,26 @@ body {
   width: 100%;
 }
 
-#to-do-list-container {
+.to-do-list {
+  width: 100%;
+  background-color: var(--secondary-color);
+  border-radius: 50px;
+  border: inset 5px solid #ffe1b8;
+  padding-bottom: 20px;
+}
+
+#to-do-list-form {
   display: flex;
   flex-direction: column;
   align-items: space-between;
-  width: 100%;
   text-align: center;
-  background-color: var(--secondary-color);
   font-family: "Unbounded-Regular";
-  border-radius: 50px;
-  border: inset 5px solid #ffe1b8;
-  position: relative;
-  padding-bottom: 20px;
 }
 
 h1,
 h2 {
   color: var(--text-color);
+  text-align: center;
 }
 
 h1 {
@@ -64,6 +67,7 @@ input {
 }
 
 .dateInput {
+  margin-left: 8px;
   font-family: "Unbounded-light";
   border: 1px solid #0a1410;
   border-radius: 0px;
@@ -71,7 +75,6 @@ input {
   height: 30px;
   width: auto;
   cursor: pointer;
-  margin: 0;
 }
 
 .inpSearch {
@@ -111,10 +114,11 @@ ul {
   display: flex;
   justify-content: space-between;
   transition: 2s;
+  height: 50px;
 }
 
 .deleteBtn,
-.btn {
+.detailsBtn {
   background-color: #b8d6ff;
   border: 1px solid #0a1410;
   border-radius: 50%;
@@ -125,6 +129,8 @@ ul {
   top: 0;
   left: 0;
   font-size: 14px;
+  display: flex;
+  align-items: center;
 }
 .checkBtn {
   background-color: #b8d6ff;
@@ -147,7 +153,8 @@ ul {
   transition: all 0.4s cubic-bezier(0.3, 0.7, 0.1, 1.9);
   top: -5px;
 }
-.task-content {
+.task-content,
+.task-end {
   font-weight: 600;
   font-size: 0.85rem;
   flex: 1 1 auto;
@@ -157,22 +164,31 @@ ul {
   overflow: hidden;
   white-space: nowrap;
 }
-
+.task-end {
+  text-align: center;
+}
+#favDialog {
+  width: 250px;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 1px solid #000;
+}
 @media all and (min-width: 501px) {
   .deleteBtn,
-  .btn {
-    height: 40px;
-    width: 40px;
-    font-size: 20px;
+  .detailsBtn {
+    height: 34px;
+    width: 34px;
     margin-left: 10px;
   }
-  #to-do-list-container {
+  .to-do-list {
     width: 500px;
   }
   .taskName {
     width: 100%;
   }
-  .task-content {
+  .task-content,
+  .task-end {
     padding: 8px;
     width: 300px;
   }
