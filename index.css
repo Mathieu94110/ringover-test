@@ -220,12 +220,16 @@ ul {
 .task-end {
   text-align: center;
 }
+.task-content {
+  padding-left: 0px;
+  color: var(--text-color);
+}
 .task-end {
   min-width: 106px;
 }
 #favDialog {
   width: 250px;
-  padding: 10px;
+  padding: 10px 10px 10px 18px;
   flex-direction: column;
   justify-content: space-evenly;
   border: 1px solid #000;
@@ -255,6 +259,13 @@ ul {
   .task-end {
     padding: 8px;
     width: 130px;
+  }
+  .task-content {
+    padding-left: 0px;
+  }
+  .task-name {
+    width: auto;
+    margin: 0px;
   }
   .task-start {
     display: flex;
