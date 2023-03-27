@@ -5,20 +5,20 @@ const labelDetails = document.getElementById("label-details");
 const descriptionDetails = document.getElementById("description-details");
 const creationDetails = document.getElementById("creation-details");
 const endDetails = document.getElementById("end-details");
-const detailsBtn = document.getElementsByClassName("detailsBtn");
-const dateInput = document.getElementsByClassName("dateInput");
 const dateWrapper = document.getElementById("input-date-wrapper");
 const searchByText = document.getElementById("search-by-text");
 const searchByStartDate = document.getElementById("search-by-start-date");
 const searchByEndDate = document.getElementById("search-by-end-date");
+
 let tasks = [];
 let tasksFilteredByText = [];
+let filteredByEndTasks = [];
 let startDate = null;
 let endDate = null;
-// api
+
 const baseUrl = "http://127.0.0.1:9000/v1/tasks";
 
-const getTasks = async () => {
+async function getTasks() {
   try {
     const response = await fetch(baseUrl);
     if (response.status === 200) {
@@ -32,9 +32,9 @@ const getTasks = async () => {
   } catch (error) {
     throw error;
   }
-};
+}
 
-const getTask = async (label) => {
+async function getTask(label) {
   try {
     const response = await fetch(`${baseUrl}/${label}`);
     if (response.status === 200) {
@@ -49,9 +49,9 @@ const getTask = async (label) => {
   } catch (error) {
     throw error;
   }
-};
+}
 
-const postTask = async (taskInfos) => {
+async function postTask(taskInfos) {
   try {
     const response = await fetch(baseUrl, {
       method: "POST",
@@ -73,9 +73,9 @@ const postTask = async (taskInfos) => {
   } catch (error) {
     throw error;
   }
-};
+}
 
-const deleteTask = async (label) => {
+async function deleteTask(label) {
   try {
     const response = await fetch(`${baseUrl}/${label}`, {
       method: "DELETE",
@@ -93,9 +93,9 @@ const deleteTask = async (label) => {
   } catch (error) {
     throw error;
   }
-};
+}
 
-const updateTask = async (taskInfos) => {
+async function updateTask(taskInfos) {
   try {
     const response = await fetch(`${baseUrl}/${taskInfos.label}`, {
       method: "PUT",
@@ -116,9 +116,9 @@ const updateTask = async (taskInfos) => {
   } catch (error) {
     throw error;
   }
-};
+}
 
-async function addTasks(task) {
+async function addTask(task) {
   if (task && task.label) {
     const taskEl = document.createElement("li");
     taskEl.setAttribute("id", task.label);
@@ -129,7 +129,7 @@ async function addTasks(task) {
   <div class="task-name">
   <span  class="task-content">${task.label}</span>
   <span  class="task-start">${formatDate(task.start_date)}</span>
-  <button onclick="" class="detailsBtn"  id="${
+  <button onclick="" class="details-button"  id="${
     task.label
   }"><i class="fa-solid fa-magnifying-glass"></i> </button>
   <span  class="task-end">${
@@ -137,7 +137,7 @@ async function addTasks(task) {
   }</span>
   <button onclick="removeTask(event)" id="${
     task.label
-  }"class="deleteBtn"><i class='fa-solid fa-trash'></i></button>
+  }"class="delete-button"><i class='fa-solid fa-check'></i></button>
   </div>
   `;
     taskEl.innerHTML = taskElMarkup;
@@ -145,7 +145,7 @@ async function addTasks(task) {
   }
 }
 
-const removeTask = async (e) => {
+async function removeTask(e) {
   let label;
   if (e.target.id) {
     label = e.target.id;
@@ -156,18 +156,17 @@ const removeTask = async (e) => {
   if (response && response.ok) {
     document.getElementById(label).remove();
   }
-};
+}
 
-const getTaskInfos = async (label) => {
+async function getTaskInfos(label) {
   const response = await getTask(label);
   return response;
-};
+}
 
-async function onOpen(label) {
+async function onModalOpen(label) {
   const response = await getTaskInfos(label);
   const jsonRes = await response.json();
   if (response && response.ok) {
-    console.log(jsonRes);
     const { label, description, end_date, start_date } = jsonRes;
     const inputDetails = `
       <label class="task-content">Changer la date de fin:</label>   
@@ -178,7 +177,7 @@ async function onOpen(label) {
     id="${label}"
     name="end_date"
     pattern="\d{4}-\d{2}-\d{2}"
-    class="dateInput"
+    class="date-input"
     onchange="changeEndDate(event)"
     />
     `;
@@ -201,8 +200,7 @@ async function onOpen(label) {
   }
 }
 
-const changeEndDate = async (e) => {
-  console.log(e.target);
+async function changeEndDate(e) {
   const label = e.target.id;
   const isoDate = new Date(e.target.value).toISOString();
   const response = await updateTask({
@@ -214,9 +212,8 @@ const changeEndDate = async (e) => {
     document
       .getElementById(label)
       .getElementsByClassName("task-end")[0].innerHTML = formatDate(isoDate);
-    alert("Date de fin modifiée !");
   }
-};
+}
 
 function closeTaskDetailsModal() {
   favDialog.close();
@@ -233,17 +230,15 @@ function formatDateUsToEn(date) {
 function clearDateInputs() {
   startDate = null;
   endDate = null;
-  alert("La date de création ne peut pas etre postérieure à la date de fin");
   searchByStartDate.value = "";
   searchByEndDate.value = "";
+  alert("La date de création ne peut pas etre postérieure à la date de fin");
 }
-// Events
 
 tasksList.addEventListener("click", async (e) => {
-  console.log(e.target.parentElement.classList);
   if (
-    e.target.classList.contains("detailsBtn") ||
-    e.target.parentElement.classList.contains("detailsBtn")
+    e.target.classList.contains("details-button") ||
+    e.target.parentElement.classList.contains("details-button")
   ) {
     e.stopPropagation();
     let label;
@@ -252,7 +247,7 @@ tasksList.addEventListener("click", async (e) => {
     } else {
       label = e.target.parentElement.id;
     }
-    onOpen(label);
+    onModalOpen(label);
   }
 });
 
@@ -260,7 +255,6 @@ tasksForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const label = tasksForm.elements["label"].value;
   const description = tasksForm.elements["description"].value;
-
   const newTask = {
     label: label,
     description: description,
@@ -269,7 +263,7 @@ tasksForm.addEventListener("submit", async (event) => {
   const response = await postTask(newTask);
   if (response && response.ok) {
     tasksForm.reset();
-    addTasks(newTask);
+    addTask(newTask);
   }
 });
 
@@ -281,7 +275,6 @@ function filterTasks() {
   let textArray = [];
   for (let i = 0; i < li.length; i++) {
     let task = li[i];
-    console.log(task);
     if (task.id.toLowerCase().indexOf(query) > -1) {
       task.style.display = "";
       textArray.push(task);
@@ -344,42 +337,29 @@ function checkByDates() {
         clearDateInputs();
       } else if (startDate && endDate && startDate < endDate) {
         if (taskStart === startDate && taskEnd === endDate) {
-          console.log(
-            `la date de crea de ${taskStart} est sup ou egal a startDate et date de fin ${taskEnd} prevu <= endDate`
-          );
           task.style.display = "";
         } else {
-          console.log(
-            `la date de crea de ${taskStart} est < a startDate et date de fin ${taskEnd} prevu > endDate`
-          );
           task.style.display = "none";
         }
       } else if (startDate && endDate && startDate === endDate) {
         if (taskStart === startDate && taskEnd === endDate) {
-          console.log("");
           task.style.display = "";
         } else {
-          console.log("");
           task.style.display = "none";
         }
       } else if (startDate && !endDate) {
         if (taskStart === startDate) {
-          console.log("");
           task.style.display = "";
         } else {
-          console.log("");
           task.style.display = "none";
         }
       } else if (!startDate && endDate) {
         if (taskEnd === endDate) {
-          console.log("");
           task.style.display = "";
         } else {
-          console.log("");
           task.style.display = "none";
         }
       } else {
-        console.log("");
         task.style.display = "";
       }
     }
@@ -406,15 +386,31 @@ function filterByEndDate(date) {
   filterTasks();
 }
 
+async function switchMode() {
+  filteredByEndTasks = tasks.sort((a, b) => {
+    if (new Date(a.end_date).getTime() > new Date(b.end_date).getTime()) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+  tasksList.innerHTML = "";
+  filteredByEndTasks.map((t) => addTask(t));
+}
+
 async function main() {
   tasks = await getTasks();
-  console.log(tasks);
+  filteredByEndTasks = [...tasks];
+  // to keep in memory list before filter by end date
+  addTask(filteredByEndTasks);
+  // for initial list
+  addTask(tasks);
   if (tasks && tasks.length > 0) {
     tasks.map((task) => {
-      addTasks(task);
+      addTask(task);
     });
   }
-  addTasks(tasks);
+  addTask(tasks);
 }
 
 main();

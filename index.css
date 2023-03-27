@@ -1,6 +1,7 @@
 :root {
   --primary-color: #353738;
   --secondary-color: #f9e4b7;
+  --ternary-color: #e5f0ff;
   --text-color: #001e47;
 }
 
@@ -48,15 +49,24 @@ label {
 #end-details {
   color: #000;
   font-weight: bold;
+  font-size: 12px;
 }
 
 h1 {
   font-size: 22px;
+  margin: 15px 0px;
 }
 h2 {
   font-size: 18px;
+  margin: 8px 0px;
 }
 
+button {
+  cursor: pointer;
+}
+menu {
+  padding: 0px;
+}
 input,
 span,
 button {
@@ -72,7 +82,7 @@ input {
   width: 60%;
   margin: 4px auto;
   box-shadow: inset;
-  background-color: #e5f0ff;
+  background-color: var(--ternary-color);
 }
 #label,
 #description,
@@ -85,7 +95,7 @@ input {
   flex-direction: column;
 }
 .search-by-text label {
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .search-by-date {
@@ -105,7 +115,7 @@ input {
   cursor: pointer;
 }
 
-.dateInput {
+.date-input {
   margin-left: 8px;
   font-family: "Unbounded-light";
   border: 1px solid #0a1410;
@@ -115,12 +125,24 @@ input {
   width: auto;
   cursor: pointer;
 }
-
-.validTaskBtn {
-  padding: 4px;
-  margin-top: 6px;
+.filter-by-end-input {
+  margin: 0px 10px;
+  background-color: #b8d6ff;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 10px;
+}
+.search-mode {
+  padding: 2px 0px 2px 2px;
+  margin: 0px 0px 0px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  height: 30px;
+}
+#filter-by-end-text {
+  font-size: 12px;
+  min-width: 140px;
 }
 .task-name {
   display: flex;
@@ -147,39 +169,34 @@ ul {
   justify-content: space-between;
   transition: 2s;
   height: 50px;
+  align-items: center;
 }
 
-.deleteBtn,
-.detailsBtn {
+.delete-button,
+.details-button {
   background-color: #b8d6ff;
   border: 1px solid #0a1410;
   border-radius: 50%;
   height: 26px;
   width: 26px;
-  cursor: pointer;
-  position: relative;
-  top: 0;
-  left: 0;
   font-size: 14px;
   display: flex;
   align-items: center;
 }
-.checkBtn {
-  background-color: #b8d6ff;
-  border: 1px solid #0a1410;
-  border-radius: 50%;
-  height: 20px;
-  width: 20px;
+
+.valid-task-button,
+.cancel-button {
+  padding: 2px 4px;
+  font-size: 12px;
   cursor: pointer;
-  position: relative;
-  top: 0;
-  left: 0;
-  font-size: 20px;
+  font-weight: bold;
 }
 
-.deleteBtn:hover,
-.detailsBtn:hover,
-.validTaskBtn:hover {
+.delete-button:hover,
+.details-button:hover,
+.valid-task-button:hover,
+.cancel-button:hover,
+.filter-by-end-input:hover {
   background-color: var(--primary-color);
   color: #b8d6ff;
   transition: all 0.4s cubic-bezier(0.3, 0.7, 0.1, 1.9);
@@ -202,7 +219,9 @@ ul {
 .task-start,
 .task-end {
   text-align: center;
-  width: auto;
+}
+.task-end {
+  min-width: 106px;
 }
 #favDialog {
   width: 250px;
@@ -212,8 +231,8 @@ ul {
   border: 1px solid #000;
 }
 @media all and (min-width: 501px) {
-  .deleteBtn,
-  .detailsBtn {
+  .delete-button,
+  .details-button {
     height: 28px;
     width: 34px;
     margin-left: 10px;
@@ -222,7 +241,7 @@ ul {
     width: 500px;
   }
   .search-by-text label {
-    font-size: 24px;
+    font-size: 20px;
   }
   .search-by-date label {
     font-size: 18px;
@@ -242,28 +261,44 @@ ul {
     text-align: left;
     width: 130px;
   }
-  .checkBtn {
-    height: 30px;
-    width: 30px;
-  }
   ul {
     margin: 0 20px;
   }
   h1 {
-    font-size: 32px;
+    font-size: 28px;
   }
   h2 {
-    font-size: 24px;
+    font-size: 20px;
+  }
+  menu {
+    padding: 8px;
   }
   input,
   span,
   button {
     font-size: 14px;
   }
+  .valid-task-button,
+  .cancel-button {
+    padding: 6px;
+    font-size: 16px;
+  }
+
   #label,
   #description,
   #search-by-start-date,
   #search-by-end-date {
+    font-size: 16px;
+  }
+  #description {
+    margin-bottom: 8px;
+  }
+  #label-details,
+  #description-details,
+  #creation-details,
+  #end-details {
+    color: #000;
+    font-weight: bold;
     font-size: 16px;
   }
 }
