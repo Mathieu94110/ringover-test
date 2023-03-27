@@ -12,7 +12,7 @@ body {
 }
 
 .container {
-  height: calc(100vh - 16px);
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -231,6 +231,9 @@ ul {
   border: 1px solid #000;
 }
 @media all and (min-width: 501px) {
+  .container {
+    height: calc(100vh - 16px);
+  }
   .delete-button,
   .details-button {
     height: 28px;
