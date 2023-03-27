@@ -122,8 +122,8 @@ async function addTask(task) {
   if (task && task.label) {
     const taskEl = document.createElement("li");
     taskEl.setAttribute("id", task.label);
-    if (task.isCompleted) {
-      taskEl.classList.add("complete");
+    if (!tasks.some((t) => t.label === task.label)) {
+      tasks = [...tasks, task];
     }
     const taskElMarkup = `
   <div class="task-name">
@@ -177,7 +177,7 @@ async function onModalOpen(label) {
     id="${label}"
     name="end_date"
     pattern="\d{4}-\d{2}-\d{2}"
-    class="date-input"
+    class="modal-date-input"
     onchange="changeEndDate(event)"
     />
     `;
@@ -212,6 +212,9 @@ async function changeEndDate(e) {
     document
       .getElementById(label)
       .getElementsByClassName("task-end")[0].innerHTML = formatDate(isoDate);
+    // update task end_date for filter by end_date
+    let taskIndex = tasks.findIndex((obj) => obj.label == label);
+    tasks[taskIndex].end_date = isoDate;
   }
 }
 

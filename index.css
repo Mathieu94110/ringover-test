@@ -115,8 +115,9 @@ input {
   cursor: pointer;
 }
 
-.date-input {
-  margin-left: 8px;
+.date-input,
+.modal-date-input {
+  margin-left: 0px;
   font-family: "Unbounded-light";
   border: 1px solid #0a1410;
   border-radius: 0px;
@@ -124,6 +125,10 @@ input {
   height: 30px;
   width: auto;
   cursor: pointer;
+}
+
+.date-input {
+  margin-left: 8px;
 }
 .filter-by-end-input {
   margin: 0px 10px;
@@ -160,16 +165,6 @@ ul {
   padding: 0;
   max-height: 260px;
   overflow-y: auto;
-}
-
-.ul li {
-  list-style: none;
-  margin: 5px;
-  display: flex;
-  justify-content: space-between;
-  transition: 2s;
-  height: 50px;
-  align-items: center;
 }
 
 .delete-button,
