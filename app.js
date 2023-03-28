@@ -118,7 +118,7 @@ async function updateTask(taskInfos) {
   }
 }
 
-async function addTask(task) {
+function addTask(task) {
   if (task && task.label) {
     const taskEl = document.createElement("li");
     taskEl.setAttribute("id", task.label);
@@ -212,7 +212,7 @@ async function changeEndDate(e) {
     document
       .getElementById(label)
       .getElementsByClassName("task-end")[0].innerHTML = formatDate(isoDate);
-    // update task end_date for filter by end_date
+    // update task end_date for filter by end date
     let taskIndex = tasks.findIndex((obj) => obj.label == label);
     tasks[taskIndex].end_date = isoDate;
   }
@@ -230,12 +230,12 @@ function formatDateUsToEn(date) {
   return date.split("-").reverse().join("-");
 }
 
-function clearDateInputs() {
+function clearDateInputsAndSearchText() {
   startDate = null;
   endDate = null;
   searchByStartDate.value = "";
   searchByEndDate.value = "";
-  alert("La date de création ne peut pas etre postérieure à la date de fin");
+  searchByText.value = "";
 }
 
 tasksList.addEventListener("click", async (e) => {
@@ -256,6 +256,9 @@ tasksList.addEventListener("click", async (e) => {
 
 tasksForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  clearDateInputsAndSearchText();
+  tasksList.innerHTML = "";
+  tasks.map((t) => addTask(t));
   const label = tasksForm.elements["label"].value;
   const description = tasksForm.elements["description"].value;
   const newTask = {
@@ -270,7 +273,19 @@ tasksForm.addEventListener("submit", async (event) => {
   }
 });
 
-searchByText.addEventListener("keyup", filterTasks);
+const debounce =
+  (fn, delay, timeout = 0) =>
+  (args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(args), delay);
+  };
+
+function onKeyup(e) {
+  const searchedValue = e.target.value.toLowerCase();
+  filterTasks(searchedValue);
+}
+
+searchByText.addEventListener("keyup", debounce(onKeyup, 800));
 
 function filterTasks() {
   const query = searchByText.value.toLowerCase();
@@ -301,15 +316,7 @@ function checkByDates() {
         task.getElementsByClassName("task-start")[0].innerHTML;
       let taskFilteredEnd =
         task.getElementsByClassName("task-end")[0].innerHTML;
-      if (startDate && endDate && startDate > endDate) {
-        clearDateInputs();
-      } else if (startDate && endDate && startDate < endDate) {
-        if (taskFilteredStart === startDate && taskFilteredEnd === endDate) {
-          task.style.display = "";
-        } else {
-          task.style.display = "none";
-        }
-      } else if (startDate && endDate && startDate === endDate) {
+      if (startDate && endDate) {
         if (taskFilteredStart === startDate && taskFilteredEnd === endDate) {
           task.style.display = "";
         } else {
@@ -327,8 +334,6 @@ function checkByDates() {
         } else {
           task.style.display = "none";
         }
-      } else {
-        task.style.display = "";
       }
     }
   } else {
@@ -336,15 +341,7 @@ function checkByDates() {
       let task = tasks[i];
       let taskStart = task.getElementsByClassName("task-start")[0].innerHTML;
       let taskEnd = task.getElementsByClassName("task-end")[0].innerHTML;
-      if (startDate && endDate && startDate > endDate) {
-        clearDateInputs();
-      } else if (startDate && endDate && startDate < endDate) {
-        if (taskStart === startDate && taskEnd === endDate) {
-          task.style.display = "";
-        } else {
-          task.style.display = "none";
-        }
-      } else if (startDate && endDate && startDate === endDate) {
+      if (startDate && endDate) {
         if (taskStart === startDate && taskEnd === endDate) {
           task.style.display = "";
         } else {
@@ -362,8 +359,6 @@ function checkByDates() {
         } else {
           task.style.display = "none";
         }
-      } else {
-        task.style.display = "";
       }
     }
   }
@@ -389,7 +384,8 @@ function filterByEndDate(date) {
   filterTasks();
 }
 
-async function switchMode() {
+function switchMode() {
+  clearDateInputsAndSearchText();
   filteredByEndTasks = tasks.sort((a, b) => {
     if (new Date(a.end_date).getTime() > new Date(b.end_date).getTime()) {
       return 1;

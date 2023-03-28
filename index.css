@@ -217,6 +217,7 @@ ul {
 }
 .task-content {
   padding-left: 0px;
+  margin-right: 10px;
   color: var(--text-color);
 }
 .task-end {
@@ -257,6 +258,7 @@ ul {
   }
   .task-content {
     padding-left: 0px;
+    margin: 0px;
   }
   .task-name {
     width: auto;
